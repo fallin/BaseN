@@ -38,35 +38,19 @@ namespace BaseN
             get { return _modhex.Value; }
         }
 
-        readonly IReadOnlyList<char> _alphabet;
-        readonly int _bitsPerChar;
-        readonly int _bitsPerQuantum;
-
-        protected BaseEncoding(IReadOnlyList<char> alphabet, int @encodingBase)
+        protected BaseEncoding(string alphabet, int @encodingBase)
         {
-            _alphabet = alphabet;
+            Alphabet = alphabet.ToCharArray();
 
             Padding = '=';
-            _bitsPerChar = Log2(encodingBase);
-            _bitsPerQuantum = Lcm(8, _bitsPerChar);
+            BitsPerChar = Log2(encodingBase);
+            BitsPerQuantum = Lcm(8, BitsPerChar);
         }
 
         public char Padding { get; protected set; }
-
-        public IReadOnlyList<char> Alphabet
-        {
-            get { return _alphabet; }
-        }
-
-        public int BitsPerChar
-        {
-            get { return _bitsPerChar; }
-        }
-
-        public int BitsPerQuantum
-        {
-            get { return _bitsPerQuantum; }
-        }
+        public IReadOnlyList<char> Alphabet { get; private set; }
+        public int BitsPerChar { get; private set; }
+        public int BitsPerQuantum { get; private set; }
 
         public string Encode(byte[] bytes)
         {
