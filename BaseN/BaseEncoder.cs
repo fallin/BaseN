@@ -9,9 +9,7 @@ namespace BaseN
     {
         readonly BaseEncoding _encoding;
         readonly TextWriter _writer;
-        readonly byte _charMask;
-        int _sourcePosition;
-        byte _accumulator;
+        readonly BitReader _reader;
         int _charsWritten;
         bool _disposed;
 
@@ -23,7 +21,8 @@ namespace BaseN
             _encoding = encoding;
             _writer = writer;
 
-            _charMask = CreateMask(BitsPerChar);
+            MemoryStream inputStream = new MemoryStream();
+            _reader = new BitReader(inputStream);
         }
 
         char Padding
@@ -58,12 +57,22 @@ namespace BaseN
 
         public void Write(ArraySegment<byte> buffer)
         {
-            foreach (byte index in RealignByteSizeBoundaries(buffer))
+            AppendToStream(_reader.BaseStream, buffer);
+
+            byte index;
+            while ((_reader.ReadCompleteChunk(BitsPerChar, out index)) > 0)
             {
                 char c = Alphabet[index];
                 _writer.Write(c);
                 _charsWritten++;
             }
+        }
+
+        void AppendToStream(Stream stream, ArraySegment<byte> buffer)
+        {
+            long originalPosition = stream.Position;
+            stream.Write(buffer.Array, buffer.Offset, buffer.Count);
+            stream.Position = originalPosition;
         }
 
         public void Flush()
@@ -74,46 +83,6 @@ namespace BaseN
         public void Close()
         {
             Dispose(true);
-        }
-
-        IEnumerable<byte> RealignByteSizeBoundaries(IEnumerable<byte> bytes)
-        {
-            foreach (byte octet in bytes)
-            {
-                while (true)
-                {
-                    if (_sourcePosition < 8)
-                    {
-                        _sourcePosition += BitsPerChar;
-                    }
-                    else // is incomplete, resume
-                    {
-                        _sourcePosition %= 8;
-                        if (_sourcePosition == 0) break;
-                    }
-
-                    int shift = 8 - _sourcePosition;
-                    byte x = shift > 0 ? (byte)(octet >> shift) : (byte)(octet << Math.Abs(shift));
-                    _accumulator |= x;
-
-                    if (_sourcePosition > 8) break; // incomplete, get next byte
-
-                    _accumulator &= _charMask;
-                    yield return _accumulator;
-                    _accumulator = 0;
-                }
-            }
-        }
-
-        static byte CreateMask(int bits)
-        {
-            byte mask = 0;
-            for (int i = 0; i < bits; i++)
-            {
-                mask <<= 1;
-                mask |= 1;
-            }
-            return mask;
         }
 
         void IDisposable.Dispose()
@@ -146,11 +115,11 @@ namespace BaseN
 
         void FinalizeEncoding()
         {
-            if (_sourcePosition > 8)
+            byte index;
+            int readBits = _reader.ReadChunk(BitsPerChar, out index);
+            if (readBits > 0)
             {
-                _sourcePosition = 0; // flush can be called more than once!
-                _accumulator &= _charMask;
-                char c = Alphabet[_accumulator];
+                char c = Alphabet[index];
                 _writer.Write(c);
                 _charsWritten++;
             }
