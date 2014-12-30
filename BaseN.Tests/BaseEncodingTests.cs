@@ -8,7 +8,7 @@ namespace BaseN.Tests
     [TestFixture]
     public class BaseEncodingTests
     {
-        const string SimpleString = "secretpassword";
+        const string SimpleString = "this is a test";
         readonly Guid _uuid = new Guid("c4f2e4fefdd74d638a30d2c44d443034");
 
         const string B64 = "64 bit";
@@ -28,7 +28,7 @@ namespace BaseN.Tests
         {
             byte[] ascii = Encoding.ASCII.GetBytes(SimpleString);
             string encoded = BaseEncoding.Base64.Encode(ascii);
-            encoded.Should().Be("c2VjcmV0cGFzc3dvcmQ=");
+            encoded.Should().Be("dGhpcyBpcyBhIHRlc3Q=");
         }
 
         [Test, Category(B64)]
@@ -82,7 +82,7 @@ namespace BaseN.Tests
         {
             byte[] ascii = Encoding.ASCII.GetBytes(SimpleString);
             string encoded = BaseEncoding.Base64UrlSafe.Encode(ascii);
-            encoded.Should().Be("c2VjcmV0cGFzc3dvcmQ=");
+            encoded.Should().Be("dGhpcyBpcyBhIHRlc3Q=");
         }
 
         [Test, Category(B32)]
@@ -97,7 +97,7 @@ namespace BaseN.Tests
         {
             byte[] ascii = Encoding.ASCII.GetBytes(SimpleString);
             string encoded = BaseEncoding.Base32.Encode(ascii);
-            encoded.Should().Be("ONSWG4TFORYGC43TO5XXEZA=");
+            encoded.Should().Be("ORUGS4ZANFZSAYJAORSXG5A=");
         }
 
         [Test, Category(B32)]
@@ -184,7 +184,7 @@ namespace BaseN.Tests
         {
             byte[] ascii = Encoding.ASCII.GetBytes(SimpleString);
             string encoded = BaseEncoding.Base16.Encode(ascii);
-            encoded.Should().Be("73656372657470617373776F7264");
+            encoded.Should().Be("7468697320697320612074657374");
         }
 
         [Test, Category("Modhex")]
@@ -192,7 +192,7 @@ namespace BaseN.Tests
         {
             byte[] ascii = Encoding.ASCII.GetBytes(SimpleString);
             string encoded = BaseEncoding.ModHex.Encode(ascii);
-            encoded.Should().Be("iehgheidhgifichbieieiihvidhf");
+            encoded.Should().Be("ifhjhkiedchkiedchbdcifhgieif");
         }
     }
 }
