@@ -168,7 +168,7 @@ namespace BaseN
 
         public void Close()
         {
-            Dispose(true);
+            Dispose();
         }
 
         //public void Flush()

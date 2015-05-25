@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using BaseN.Encodings.Rfc3548;
 using BaseN.Encodings.Yubico;
+using EnsureThat;
 
 namespace BaseN
 {
@@ -54,14 +55,20 @@ namespace BaseN
 
         public string Encode(byte[] bytes)
         {
-            using (var writer = new StringWriter())
+            using (TextWriter writer = new StringWriter())
             {
-                using (var encoder = new BaseEncoder(this, writer))
+                using (var encoder = CreateEncoder(writer))
                 {
                     encoder.Write(bytes);
                 }
                 return writer.ToString();
             }
+        }
+
+        protected virtual IBaseEncoder CreateEncoder(TextWriter writer)
+        {
+            Ensure.That(writer, "writer").IsNotNull();
+            return new BaseEncoder(this, writer);
         }
 
         static int Gcf(int a, int b)
