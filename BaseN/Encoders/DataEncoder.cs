@@ -3,14 +3,32 @@ using System.Collections.Generic;
 using System.IO;
 using EnsureThat;
 
-namespace BaseN.Encodings.HeXuYue
+namespace BaseN.Encoders
 {
-    public class Base62Encoder : IBaseEncoder
+    public class DataEncoder : IDataEncoder
     {
-        readonly BaseEncoding _encoding;
+        readonly DataEncoding _encoding;
         readonly TextWriter _writer;
         readonly BitReader _reader;
+        int _charsWritten;
         bool _disposed;
+
+        public DataEncoder(DataEncoding encoding, TextWriter writer)
+        {
+            Ensure.That(encoding, "encoding").IsNotNull();
+            Ensure.That(writer, "writer").IsNotNull();
+
+            _encoding = encoding;
+            _writer = writer;
+
+            MemoryStream inputStream = new MemoryStream();
+            _reader = new BitReader(inputStream);
+        }
+
+        char Padding
+        {
+            get { return _encoding.Padding; }
+        }
 
         IReadOnlyList<char> Alphabet
         {
@@ -20,6 +38,11 @@ namespace BaseN.Encodings.HeXuYue
         int BitsPerChar
         {
             get { return _encoding.BitsPerChar; }
+        }
+
+        int BitsPerQuantum
+        {
+            get { return _encoding.BitsPerQuantum; }
         }
 
         public void Write(byte[] buffer)
@@ -39,20 +62,9 @@ namespace BaseN.Encodings.HeXuYue
             byte index;
             while ((_reader.ReadCompleteChunk(BitsPerChar, out index)) > 0)
             {
-                if (index < 60)
-                {
-                    _writer.Write(Alphabet[index]);
-                }
-                else if (index < 62)
-                {
-                    _reader.Seek(-1, SeekOrigin.Current);
-                    _writer.Write(Alphabet[60]);
-                }
-                else
-                {
-                    _reader.Seek(-1, SeekOrigin.Current);
-                    _writer.Write(Alphabet[61]);
-                }
+                char c = Alphabet[index];
+                _writer.Write(c);
+                _charsWritten++;
             }
         }
 
@@ -63,25 +75,23 @@ namespace BaseN.Encodings.HeXuYue
             stream.Position = originalPosition;
         }
 
-        public Base62Encoder(Base62Encoding encoding, TextWriter writer)
+        public void Flush()
         {
-            Ensure.That(encoding, "encoding").IsNotNull();
-            Ensure.That(writer, "writer").IsNotNull();
-
-            _encoding = encoding;
-            _writer = writer;
-
-            MemoryStream inputStream = new MemoryStream();
-            _reader = new BitReader(inputStream);
+            _writer.Flush();
         }
 
-        public void Dispose()
+        public void Close()
+        {
+            Dispose(true);
+        }
+
+        void IDisposable.Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        ~Base62Encoder()
+        ~DataEncoder()
         {
             Dispose(false);
         }
@@ -92,13 +102,12 @@ namespace BaseN.Encodings.HeXuYue
             {
                 if (disposing)
                 {
-                    // free other managed objects that implement
-                    // IDisposable only
+                    // free managed resources that implement IDisposable
                     FinalizeEncoding();
                 }
 
-                // release any unmanaged objects
-                // set the object references to null
+                // free native resources if there are any 
+                // and set object references to null
 
                 _disposed = true;
             }
@@ -110,11 +119,17 @@ namespace BaseN.Encodings.HeXuYue
             int readBits = _reader.ReadChunk(BitsPerChar, out index);
             if (readBits > 0)
             {
-                if (readBits < BitsPerChar)
-                {
-                    index >>= (BitsPerChar - readBits);
-                }
-                _writer.Write(Alphabet[index]);
+                char c = Alphabet[index];
+                _writer.Write(c);
+                _charsWritten++;
+            }
+
+            int charsPerQuantum = BitsPerQuantum/BitsPerChar;
+            int charsInFinalGroup = _charsWritten % charsPerQuantum;
+            if (charsInFinalGroup > 0)
+            {
+                int missingCharsInFinalGroup = charsPerQuantum - charsInFinalGroup;
+                _writer.Write(new string(Padding, missingCharsInFinalGroup));
             }
         }
     }
