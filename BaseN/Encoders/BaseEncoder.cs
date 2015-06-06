@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using EnsureThat;
 
-namespace BaseN
+namespace BaseN.Encoders
 {
     public class BaseEncoder : IBaseEncoder
     {

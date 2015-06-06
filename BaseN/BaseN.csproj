@@ -45,18 +45,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseEncoder.cs" />
+    <Compile Include="Encoders\BaseEncoder.cs" />
     <Compile Include="BitReader.cs" />
-    <Compile Include="Encodings\Rfc3548\Base16Encoding.cs" />
-    <Compile Include="Encodings\Rfc3548\Base32Encoding.cs" />
+    <Compile Include="Encodings\Base16Encoding.cs" />
+    <Compile Include="Encodings\Base32Encoding.cs" />
     <Compile Include="BaseEncoding.cs" />
-    <Compile Include="Encodings\HeXuYue\Base62Encoder.cs" />
-    <Compile Include="Encodings\HeXuYue\Base62Encoding.cs" />
-    <Compile Include="Encodings\Yubico\ModHexEncoding.cs" />
-    <Compile Include="IBaseEncoder.cs" />
+    <Compile Include="Encoders\Base62Encoder.cs" />
+    <Compile Include="Encodings\Base62Encoding.cs" />
+    <Compile Include="Encodings\ModHexEncoding.cs" />
+    <Compile Include="Encoders\IBaseEncoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Encodings\Rfc3548\Base64Encoding.cs" />
-    <Compile Include="Encodings\Rfc3548\Base64UrlSafeEncoding.cs" />
+    <Compile Include="Encodings\Base64Encoding.cs" />
+    <Compile Include="Encodings\Base64UrlSafeEncoding.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

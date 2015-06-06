@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
+using BaseN.Encoders;
 
-namespace BaseN.Encodings.HeXuYue
+namespace BaseN.Encodings
 {
     /// <summary>
-    /// Base62 Encoding as described in "A Secure, Lossless, and Compressed Base62 Encoding", by
+    /// Base62 data encoding as described in "A Secure, Lossless, and Compressed Base62 Encoding", by
     /// Kejing He, Xiancheng Xu and Qiang Yue.
     /// </summary>
     /// <remarks>

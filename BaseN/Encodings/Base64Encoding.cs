@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace BaseN.Encodings.Rfc3548
+namespace BaseN.Encodings
 {
     /// <summary>
-    /// http://tools.ietf.org/html/rfc3548
+    /// RFC 3548 Base64 data encoding.
     /// </summary>
     public class Base64Encoding : BaseEncoding
     {

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using BaseN.Encodings.Rfc3548;
-using BaseN.Encodings.Yubico;
+using BaseN.Encoders;
+using BaseN.Encodings;
 using EnsureThat;
 
 namespace BaseN

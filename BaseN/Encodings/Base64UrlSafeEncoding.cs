@@ -1,7 +1,10 @@
 ﻿using System;
 
-namespace BaseN.Encodings.Rfc3548
+namespace BaseN.Encodings
 {
+    /// <summary>
+    /// RFC 3548 Base64 data encoding with URL and Filename Safe Alphabet.
+    /// </summary>
     public class Base64UrlSafeEncoding : BaseEncoding
     {
         public Base64UrlSafeEncoding()

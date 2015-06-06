@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-using BaseN.Encodings.HeXuYue;
+using BaseN.Encodings;
 using FluentAssertions;
 using NUnit.Framework;
 

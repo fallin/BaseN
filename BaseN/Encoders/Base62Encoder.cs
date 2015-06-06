@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using BaseN.Encodings;
 using EnsureThat;
 
-namespace BaseN.Encodings.HeXuYue
+namespace BaseN.Encoders
 {
     public class Base62Encoder : IBaseEncoder
     {

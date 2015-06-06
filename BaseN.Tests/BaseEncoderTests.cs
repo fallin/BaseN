@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using BaseN.Encoders;
 using FluentAssertions;
 using NUnit.Framework;
 

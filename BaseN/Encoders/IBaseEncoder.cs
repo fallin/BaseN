@@ -1,6 +1,6 @@
 using System;
 
-namespace BaseN
+namespace BaseN.Encoders
 {
     public interface IBaseEncoder : IDisposable
     {
