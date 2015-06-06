@@ -8,9 +8,9 @@ namespace BaseN.Encodings
     /// <remarks>
     /// See https://www.yubico.com/modhex-calculator/
     /// </remarks>
-    public class ModHexEncoding : BaseEncoding
+    public class ModHexDataEncoding : DataEncoding
     {
-        public ModHexEncoding()
+        public ModHexDataEncoding()
             : base("cbdefghijklnrtuv", 16)
         {
         }

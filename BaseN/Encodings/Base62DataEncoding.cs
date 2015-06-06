@@ -24,16 +24,16 @@ namespace BaseN.Encodings
     /// here: http://www.opitz-online.com/dl/base62_encoding.pdf
     /// </para>
     /// </remarks>
-    public class Base62Encoding : BaseEncoding
+    public class Base62DataEncoding : DataEncoding
     {
-        public Base62Encoding() 
+        public Base62DataEncoding() 
             : base("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", 64)
         {
         }
 
-        protected override IBaseEncoder CreateEncoder(TextWriter writer)
+        protected override IDataEncoder CreateEncoder(TextWriter writer)
         {
-            return new Base62Encoder(this, writer);
+            return new Base62DataEncoder(this, writer);
         }
     }
 }
