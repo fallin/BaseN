@@ -5,7 +5,7 @@ using BaseN.Encoders;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace BaseN.Tests
+namespace BaseN.Tests.Encoders
 {
     [TestFixture]
     public class BaseEncoderTests
