@@ -15,16 +15,22 @@ namespace BaseN
             get { return _base64.Value; }
         }
 
-        static readonly Lazy<DataEncoding> _base64urlsafe = new Lazy<DataEncoding>(() => new Base64UrlSafeDataEncoding());
-        public static DataEncoding Base64UrlSafe
+        static readonly Lazy<DataEncoding> _base64Url = new Lazy<DataEncoding>(() => new Base64UrlDataEncoding());
+        public static DataEncoding Base64Url
         {
-            get { return _base64urlsafe.Value; }
+            get { return _base64Url.Value; }
         }
 
         static readonly Lazy<DataEncoding> _base32 = new Lazy<DataEncoding>(() => new Base32DataEncoding());
         public static DataEncoding Base32
         {
             get { return _base32.Value; }
+        }
+
+        static readonly Lazy<DataEncoding> _base32Hex = new Lazy<DataEncoding>(() => new Base32HexDataEncoding());
+        public static DataEncoding Base32Hex
+        {
+            get { return _base32Hex.Value; }
         }
 
         static readonly Lazy<DataEncoding> _base16 = new Lazy<DataEncoding>(() => new Base16DataEncoding());

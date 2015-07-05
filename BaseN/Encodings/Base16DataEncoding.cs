@@ -3,7 +3,7 @@
 namespace BaseN.Encodings
 {
     /// <summary>
-    /// RFC 3548 Base16 data encoding.
+    /// RFC 4648 Base16 data encoding.
     /// </summary>
     public class Base16DataEncoding : DataEncoding
     {
