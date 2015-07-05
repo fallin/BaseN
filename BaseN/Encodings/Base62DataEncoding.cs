@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
+using BaseN.Encoders;
 
-namespace BaseN.Encodings.HeXuYue
+namespace BaseN.Encodings
 {
     /// <summary>
-    /// Base62 Encoding as described in "A Secure, Lossless, and Compressed Base62 Encoding", by
+    /// Base62 data encoding as described in "A Secure, Lossless, and Compressed Base62 Encoding", by
     /// Kejing He, Xiancheng Xu and Qiang Yue.
     /// </summary>
     /// <remarks>
@@ -23,16 +24,16 @@ namespace BaseN.Encodings.HeXuYue
     /// here: http://www.opitz-online.com/dl/base62_encoding.pdf
     /// </para>
     /// </remarks>
-    public class Base62Encoding : BaseEncoding
+    public class Base62DataEncoding : DataEncoding
     {
-        public Base62Encoding() 
+        public Base62DataEncoding() 
             : base("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", 64)
         {
         }
 
-        protected override IBaseEncoder CreateEncoder(TextWriter writer)
+        protected override IDataEncoder CreateEncoder(TextWriter writer)
         {
-            return new Base62Encoder(this, writer);
+            return new Base62DataEncoder(this, writer);
         }
     }
 }

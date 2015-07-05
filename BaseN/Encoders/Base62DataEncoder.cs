@@ -1,34 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using BaseN.Encodings;
 using EnsureThat;
 
-namespace BaseN
+namespace BaseN.Encoders
 {
-    public class BaseEncoder : IBaseEncoder
+    public class Base62DataEncoder : IDataEncoder
     {
-        readonly BaseEncoding _encoding;
+        readonly DataEncoding _encoding;
         readonly TextWriter _writer;
         readonly BitReader _reader;
-        int _charsWritten;
         bool _disposed;
-
-        public BaseEncoder(BaseEncoding encoding, TextWriter writer)
-        {
-            Ensure.That(encoding, "encoding").IsNotNull();
-            Ensure.That(writer, "writer").IsNotNull();
-
-            _encoding = encoding;
-            _writer = writer;
-
-            MemoryStream inputStream = new MemoryStream();
-            _reader = new BitReader(inputStream);
-        }
-
-        char Padding
-        {
-            get { return _encoding.Padding; }
-        }
 
         IReadOnlyList<char> Alphabet
         {
@@ -38,11 +21,6 @@ namespace BaseN
         int BitsPerChar
         {
             get { return _encoding.BitsPerChar; }
-        }
-
-        int BitsPerQuantum
-        {
-            get { return _encoding.BitsPerQuantum; }
         }
 
         public void Write(byte[] buffer)
@@ -62,9 +40,20 @@ namespace BaseN
             byte index;
             while ((_reader.ReadCompleteChunk(BitsPerChar, out index)) > 0)
             {
-                char c = Alphabet[index];
-                _writer.Write(c);
-                _charsWritten++;
+                if (index < 60)
+                {
+                    _writer.Write(Alphabet[index]);
+                }
+                else if (index < 62)
+                {
+                    _reader.Seek(-1, SeekOrigin.Current);
+                    _writer.Write(Alphabet[60]);
+                }
+                else
+                {
+                    _reader.Seek(-1, SeekOrigin.Current);
+                    _writer.Write(Alphabet[61]);
+                }
             }
         }
 
@@ -75,23 +64,25 @@ namespace BaseN
             stream.Position = originalPosition;
         }
 
-        public void Flush()
+        public Base62DataEncoder(Base62DataEncoding encoding, TextWriter writer)
         {
-            _writer.Flush();
+            Ensure.That(encoding, "encoding").IsNotNull();
+            Ensure.That(writer, "writer").IsNotNull();
+
+            _encoding = encoding;
+            _writer = writer;
+
+            MemoryStream inputStream = new MemoryStream();
+            _reader = new BitReader(inputStream);
         }
 
-        public void Close()
-        {
-            Dispose(true);
-        }
-
-        void IDisposable.Dispose()
+        public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        ~BaseEncoder()
+        ~Base62DataEncoder()
         {
             Dispose(false);
         }
@@ -102,12 +93,13 @@ namespace BaseN
             {
                 if (disposing)
                 {
-                    // free managed resources that implement IDisposable
+                    // free other managed objects that implement
+                    // IDisposable only
                     FinalizeEncoding();
                 }
 
-                // free native resources if there are any 
-                // and set object references to null
+                // release any unmanaged objects
+                // set the object references to null
 
                 _disposed = true;
             }
@@ -119,17 +111,11 @@ namespace BaseN
             int readBits = _reader.ReadChunk(BitsPerChar, out index);
             if (readBits > 0)
             {
-                char c = Alphabet[index];
-                _writer.Write(c);
-                _charsWritten++;
-            }
-
-            int charsPerQuantum = BitsPerQuantum/BitsPerChar;
-            int charsInFinalGroup = _charsWritten % charsPerQuantum;
-            if (charsInFinalGroup > 0)
-            {
-                int missingCharsInFinalGroup = charsPerQuantum - charsInFinalGroup;
-                _writer.Write(new string(Padding, missingCharsInFinalGroup));
+                if (readBits < BitsPerChar)
+                {
+                    index >>= (BitsPerChar - readBits);
+                }
+                _writer.Write(Alphabet[index]);
             }
         }
     }

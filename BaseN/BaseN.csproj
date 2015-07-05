@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\BaseN.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,7 +35,7 @@
       <HintPath>..\packages\Ensure.That.2.0.0\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\EnsureThat.dll\EnsureThat.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Annotations">
-      <HintPath>..\packages\JetBrains.Annotations.8.0.5.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+      <HintPath>..\packages\JetBrains.Annotations.9.1.1\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -45,18 +46,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseEncoder.cs" />
+    <Compile Include="Encoders\DataEncoder.cs" />
     <Compile Include="BitReader.cs" />
-    <Compile Include="Encodings\Rfc3548\Base16Encoding.cs" />
-    <Compile Include="Encodings\Rfc3548\Base32Encoding.cs" />
-    <Compile Include="BaseEncoding.cs" />
-    <Compile Include="Encodings\HeXuYue\Base62Encoder.cs" />
-    <Compile Include="Encodings\HeXuYue\Base62Encoding.cs" />
-    <Compile Include="Encodings\Yubico\ModHexEncoding.cs" />
-    <Compile Include="IBaseEncoder.cs" />
+    <Compile Include="Encodings\Base16DataEncoding.cs" />
+    <Compile Include="Encodings\Base32DataEncoding.cs" />
+    <Compile Include="DataEncoding.cs" />
+    <Compile Include="Encoders\Base62DataEncoder.cs" />
+    <Compile Include="Encodings\Base32HexDataEncoding.cs" />
+    <Compile Include="Encodings\Base62DataEncoding.cs" />
+    <Compile Include="Encodings\ModHexDataEncoding.cs" />
+    <Compile Include="Encoders\IDataEncoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Encodings\Rfc3548\Base64Encoding.cs" />
-    <Compile Include="Encodings\Rfc3548\Base64UrlSafeEncoding.cs" />
+    <Compile Include="Encodings\Base64DataEncoding.cs" />
+    <Compile Include="Encodings\Base64UrlDataEncoding.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

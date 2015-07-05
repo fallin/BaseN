@@ -1,45 +1,51 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using BaseN.Encodings.Rfc3548;
-using BaseN.Encodings.Yubico;
+using BaseN.Encoders;
+using BaseN.Encodings;
 using EnsureThat;
 
 namespace BaseN
 {
-    public abstract class BaseEncoding
+    public abstract class DataEncoding
     {
-        static readonly Lazy<BaseEncoding> _base64 = new Lazy<BaseEncoding>(() => new Base64Encoding());
-        public static BaseEncoding Base64
+        static readonly Lazy<DataEncoding> _base64 = new Lazy<DataEncoding>(() => new Base64DataEncoding());
+        public static DataEncoding Base64
         {
             get { return _base64.Value; }
         }
 
-        static readonly Lazy<BaseEncoding> _base64urlsafe = new Lazy<BaseEncoding>(() => new Base64UrlSafeEncoding());
-        public static BaseEncoding Base64UrlSafe
+        static readonly Lazy<DataEncoding> _base64Url = new Lazy<DataEncoding>(() => new Base64UrlDataEncoding());
+        public static DataEncoding Base64Url
         {
-            get { return _base64urlsafe.Value; }
+            get { return _base64Url.Value; }
         }
 
-        static readonly Lazy<BaseEncoding> _base32 = new Lazy<BaseEncoding>(() => new Base32Encoding());
-        public static BaseEncoding Base32
+        static readonly Lazy<DataEncoding> _base32 = new Lazy<DataEncoding>(() => new Base32DataEncoding());
+        public static DataEncoding Base32
         {
             get { return _base32.Value; }
         }
 
-        static readonly Lazy<BaseEncoding> _base16 = new Lazy<BaseEncoding>(() => new Base16Encoding());
-        public static BaseEncoding Base16
+        static readonly Lazy<DataEncoding> _base32Hex = new Lazy<DataEncoding>(() => new Base32HexDataEncoding());
+        public static DataEncoding Base32Hex
+        {
+            get { return _base32Hex.Value; }
+        }
+
+        static readonly Lazy<DataEncoding> _base16 = new Lazy<DataEncoding>(() => new Base16DataEncoding());
+        public static DataEncoding Base16
         {
             get { return _base16.Value; }
         }
 
-        static readonly Lazy<BaseEncoding> _modhex = new Lazy<BaseEncoding>(() => new ModHexEncoding());
-        public static BaseEncoding ModHex
+        static readonly Lazy<DataEncoding> _modhex = new Lazy<DataEncoding>(() => new ModHexDataEncoding());
+        public static DataEncoding ModHex
         {
             get { return _modhex.Value; }
         }
 
-        protected BaseEncoding(string alphabet, int @encodingBase)
+        protected DataEncoding(string alphabet, int @encodingBase)
         {
             Alphabet = alphabet.ToCharArray();
 
@@ -65,10 +71,10 @@ namespace BaseN
             }
         }
 
-        protected virtual IBaseEncoder CreateEncoder(TextWriter writer)
+        protected virtual IDataEncoder CreateEncoder(TextWriter writer)
         {
             Ensure.That(writer, "writer").IsNotNull();
-            return new BaseEncoder(this, writer);
+            return new DataEncoder(this, writer);
         }
 
         static int Gcf(int a, int b)

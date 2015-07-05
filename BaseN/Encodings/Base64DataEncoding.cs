@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace BaseN.Encodings.Rfc3548
+namespace BaseN.Encodings
 {
     /// <summary>
-    /// http://tools.ietf.org/html/rfc3548
+    /// RFC 4648 Base64 data encoding.
     /// </summary>
-    public class Base64Encoding : BaseEncoding
+    public class Base64DataEncoding : DataEncoding
     {
-        public Base64Encoding()
+        public Base64DataEncoding()
             : base("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", 64)
         {
         }
