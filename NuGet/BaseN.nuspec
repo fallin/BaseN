@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>BaseN</id>
+        <version>0.1.0</version>
+        <title>BaseN</title>
+        <authors>Brant Fallin</authors>
+        <licenseUrl>https://github.com/fallin/BaseN/blob/master/LICENSE.txt</licenseUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>A .NET (C#) implementation of various binary-to-text data encodings.</description>
+        <language>en-US</language>
+        <tags>RFC4648</tags>
+    </metadata>
+    <files>
+        <file src="..\BaseN\bin\Debug\BaseN.dll" target="lib\net451\BaseN.dll" />
+        <file src="..\BaseN\bin\Debug\BaseN.pdb" target="lib\net451\BaseN.pdb" />
+        <file src="..\BaseN\bin\Debug\BaseN.XML" target="lib\net451\BaseN.XML" />
+        <file src="..\BaseN\bin\Debug\EnsureThat.dll" target="lib\net451\EnsureThat.dll" />
+    </files>
+</package>
