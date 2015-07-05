@@ -51,6 +51,7 @@
     <Compile Include="Encodings\Base32DataEncoding.cs" />
     <Compile Include="DataEncoding.cs" />
     <Compile Include="Encoders\Base62DataEncoder.cs" />
+    <Compile Include="Encodings\Base32HexDataEncoding.cs" />
     <Compile Include="Encodings\Base62DataEncoding.cs" />
     <Compile Include="Encodings\ModHexDataEncoding.cs" />
     <Compile Include="Encoders\IDataEncoder.cs" />

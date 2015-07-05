@@ -27,6 +27,12 @@ namespace BaseN
             get { return _base32.Value; }
         }
 
+        static readonly Lazy<DataEncoding> _base32Hex = new Lazy<DataEncoding>(() => new Base32HexDataEncoding());
+        public static DataEncoding Base32Hex
+        {
+            get { return _base32Hex.Value; }
+        }
+
         static readonly Lazy<DataEncoding> _base16 = new Lazy<DataEncoding>(() => new Base16DataEncoding());
         public static DataEncoding Base16
         {
