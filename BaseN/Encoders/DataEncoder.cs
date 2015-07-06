@@ -1,19 +1,17 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using EnsureThat;
 
 namespace BaseN.Encoders
 {
-    public class DataEncoder : IDataEncoder
+    public abstract class DataEncoder : IDisposable
     {
         readonly DataEncoding _encoding;
         readonly TextWriter _writer;
         readonly BitReader _reader;
-        int _charsWritten;
         bool _disposed;
 
-        public DataEncoder(DataEncoding encoding, TextWriter writer)
+        protected DataEncoder(DataEncoding encoding, TextWriter writer)
         {
             Ensure.That(encoding, "encoding").IsNotNull();
             Ensure.That(writer, "writer").IsNotNull();
@@ -25,54 +23,25 @@ namespace BaseN.Encoders
             _reader = new BitReader(inputStream);
         }
 
-        char Padding
+        protected DataEncoding Encoding
         {
-            get { return _encoding.Padding; }
+            get { return _encoding; }
         }
 
-        IReadOnlyList<char> Alphabet
+        public void Encode(byte[] buffer)
         {
-            get { return _encoding.Alphabet; }
+            Encode(new ArraySegment<byte>(buffer));
         }
 
-        int BitsPerChar
+        public void Encode(byte[] buffer, int offset, int count)
         {
-            get { return _encoding.BitsPerChar; }
+            Encode(new ArraySegment<byte>(buffer, offset, count));
         }
 
-        int BitsPerQuantum
-        {
-            get { return _encoding.BitsPerQuantum; }
-        }
-
-        public void Write(byte[] buffer)
-        {
-            Write(new ArraySegment<byte>(buffer));
-        }
-
-        public void Write(byte[] buffer, int offset, int count)
-        {
-            Write(new ArraySegment<byte>(buffer, offset, count));
-        }
-
-        public void Write(ArraySegment<byte> buffer)
+        public void Encode(ArraySegment<byte> buffer)
         {
             AppendToStream(_reader.BaseStream, buffer);
-
-            byte index;
-            while ((_reader.ReadCompleteChunk(BitsPerChar, out index)) > 0)
-            {
-                char c = Alphabet[index];
-                _writer.Write(c);
-                _charsWritten++;
-            }
-        }
-
-        void AppendToStream(Stream stream, ArraySegment<byte> buffer)
-        {
-            long originalPosition = stream.Position;
-            stream.Write(buffer.Array, buffer.Offset, buffer.Count);
-            stream.Position = originalPosition;
+            Encode(_reader, _writer);
         }
 
         public void Flush()
@@ -84,6 +53,19 @@ namespace BaseN.Encoders
         {
             Dispose(true);
         }
+
+        protected abstract void Encode(BitReader reader, TextWriter writer);
+
+        protected abstract void FinalizeEncoding(BitReader reader, TextWriter writer);
+
+        void AppendToStream(Stream stream, ArraySegment<byte> buffer)
+        {
+            long originalPosition = stream.Position;
+            stream.Write(buffer.Array, buffer.Offset, buffer.Count);
+            stream.Position = originalPosition;
+        }
+
+        #region IDisposable Implementation
 
         void IDisposable.Dispose()
         {
@@ -103,7 +85,7 @@ namespace BaseN.Encoders
                 if (disposing)
                 {
                     // free managed resources that implement IDisposable
-                    FinalizeEncoding();
+                    FinalizeEncoding(_reader, _writer);
                 }
 
                 // free native resources if there are any 
@@ -113,24 +95,6 @@ namespace BaseN.Encoders
             }
         }
 
-        void FinalizeEncoding()
-        {
-            byte index;
-            int readBits = _reader.ReadChunk(BitsPerChar, out index);
-            if (readBits > 0)
-            {
-                char c = Alphabet[index];
-                _writer.Write(c);
-                _charsWritten++;
-            }
-
-            int charsPerQuantum = BitsPerQuantum/BitsPerChar;
-            int charsInFinalGroup = _charsWritten % charsPerQuantum;
-            if (charsInFinalGroup > 0)
-            {
-                int missingCharsInFinalGroup = charsPerQuantum - charsInFinalGroup;
-                _writer.Write(new string(Padding, missingCharsInFinalGroup));
-            }
-        }
+        #endregion
     }
 }

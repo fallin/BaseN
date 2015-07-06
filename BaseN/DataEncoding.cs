@@ -59,22 +59,27 @@ namespace BaseN
         public int BitsPerChar { get; private set; }
         public int BitsPerQuantum { get; private set; }
 
+        public int CharsPerQuantum
+        {
+            get { return BitsPerQuantum / BitsPerChar; }
+        }
+
         public string Encode(byte[] bytes)
         {
             using (TextWriter writer = new StringWriter())
             {
                 using (var encoder = CreateEncoder(writer))
                 {
-                    encoder.Write(bytes);
+                    encoder.Encode(bytes);
                 }
                 return writer.ToString();
             }
         }
 
-        protected virtual IDataEncoder CreateEncoder(TextWriter writer)
+        protected virtual DataEncoder CreateEncoder(TextWriter writer)
         {
             Ensure.That(writer, "writer").IsNotNull();
-            return new DataEncoder(this, writer);
+            return new DefaultDataEncoder(this, writer);
         }
 
         static int Gcf(int a, int b)

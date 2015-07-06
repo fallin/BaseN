@@ -31,7 +31,7 @@ namespace BaseN.Encodings
         {
         }
 
-        protected override IDataEncoder CreateEncoder(TextWriter writer)
+        protected override DataEncoder CreateEncoder(TextWriter writer)
         {
             return new Base62DataEncoder(this, writer);
         }

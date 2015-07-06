@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace BaseN
 {
-    class BitReader : IDisposable
+    public class BitReader : IDisposable
     {
         public const int EndOfStream = -1;
         readonly Stream _stream;
