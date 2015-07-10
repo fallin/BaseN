@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitIO.cs" />
     <Compile Include="Encoders\DataEncoder.cs" />
     <Compile Include="BitReader.cs" />
     <Compile Include="Encoders\DefaultDataEncoder.cs" />
