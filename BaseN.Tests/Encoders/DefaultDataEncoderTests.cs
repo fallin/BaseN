@@ -11,7 +11,7 @@ namespace BaseN.Tests.Encoders
     public class DefaultDataEncoderTests
     {
         [Test]
-        public void Write_with_quantum_single_write()
+        public void Encode_with_quantum_single_write()
         {
             var writer = new StringWriter();
             using (var encoder = new DefaultDataEncoder(DataEncoding.Base64, writer))
@@ -24,7 +24,7 @@ namespace BaseN.Tests.Encoders
         }
 
         [Test]
-        public void Write_with_quantum_across_multiple_writes()
+        public void Encode_with_quantum_across_multiple_writes()
         {
             var writer = new StringWriter();
             using (var encoder = new DefaultDataEncoder(DataEncoding.Base64, writer))
@@ -40,7 +40,7 @@ namespace BaseN.Tests.Encoders
         }
 
         [Test]
-        public void Write_with_quantum_minus1_single_write()
+        public void Encode_with_quantum_minus1_single_write()
         {
             var writer = new StringWriter();
             using (var encoder = new DefaultDataEncoder(DataEncoding.Base64, writer))
@@ -53,7 +53,7 @@ namespace BaseN.Tests.Encoders
         }
 
         [Test]
-        public void Write_with_quantum_minus2_across_multiple_writes()
+        public void Encode_with_quantum_minus2_across_multiple_writes()
         {
             var writer = new StringWriter();
             using (var encoder = new DefaultDataEncoder(DataEncoding.Base64, writer))
@@ -84,7 +84,7 @@ namespace BaseN.Tests.Encoders
         }
 
         [Test]
-        public void Write_should_resume_correctly_after_flush()
+        public void Encode_should_resume_correctly_after_flush()
         {
             var writer = new StringWriter();
             using (var encoder = new DefaultDataEncoder(DataEncoding.Base64, writer))
