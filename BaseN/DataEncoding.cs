@@ -9,41 +9,33 @@ namespace BaseN
 {
     public abstract class DataEncoding
     {
-        static readonly Lazy<DataEncoding> _base64 = new Lazy<DataEncoding>(() => new Base64DataEncoding());
-        public static DataEncoding Base64
-        {
-            get { return _base64.Value; }
-        }
+        // ReSharper disable once InconsistentNaming
+        static readonly Lazy<Base64DataEncoding> _base64 = new Lazy<Base64DataEncoding>(() => new Base64DataEncoding());
+        public static Base64DataEncoding Base64 => _base64.Value;
 
-        static readonly Lazy<DataEncoding> _base64Url = new Lazy<DataEncoding>(() => new Base64UrlDataEncoding());
-        public static DataEncoding Base64Url
-        {
-            get { return _base64Url.Value; }
-        }
+        // ReSharper disable once InconsistentNaming
+        static readonly Lazy<Base64UrlDataEncoding> _base64Url = new Lazy<Base64UrlDataEncoding>(() => new Base64UrlDataEncoding());
+        public static Base64UrlDataEncoding Base64Url => _base64Url.Value;
 
-        static readonly Lazy<DataEncoding> _base32 = new Lazy<DataEncoding>(() => new Base32DataEncoding());
-        public static DataEncoding Base32
-        {
-            get { return _base32.Value; }
-        }
+        // ReSharper disable once InconsistentNaming
+        static readonly Lazy<Base62DataEncoding> _base62 = new Lazy<Base62DataEncoding>(() => new Base62DataEncoding());
+        public static Base62DataEncoding Base62 => _base62.Value;
 
-        static readonly Lazy<DataEncoding> _base32Hex = new Lazy<DataEncoding>(() => new Base32HexDataEncoding());
-        public static DataEncoding Base32Hex
-        {
-            get { return _base32Hex.Value; }
-        }
+        // ReSharper disable once InconsistentNaming
+        static readonly Lazy<Base32DataEncoding> _base32 = new Lazy<Base32DataEncoding>(() => new Base32DataEncoding());
+        public static Base32DataEncoding Base32 => _base32.Value;
 
-        static readonly Lazy<DataEncoding> _base16 = new Lazy<DataEncoding>(() => new Base16DataEncoding());
-        public static DataEncoding Base16
-        {
-            get { return _base16.Value; }
-        }
+        // ReSharper disable once InconsistentNaming
+        static readonly Lazy<Base32HexDataEncoding> _base32Hex = new Lazy<Base32HexDataEncoding>(() => new Base32HexDataEncoding());
+        public static Base32HexDataEncoding Base32Hex => _base32Hex.Value;
 
-        static readonly Lazy<DataEncoding> _modhex = new Lazy<DataEncoding>(() => new ModHexDataEncoding());
-        public static DataEncoding ModHex
-        {
-            get { return _modhex.Value; }
-        }
+        // ReSharper disable once InconsistentNaming
+        static readonly Lazy<Base16DataEncoding> _base16 = new Lazy<Base16DataEncoding>(() => new Base16DataEncoding());
+        public static Base16DataEncoding Base16 => _base16.Value;
+
+        // ReSharper disable once InconsistentNaming
+        static readonly Lazy<ModHexDataEncoding> _modhex = new Lazy<ModHexDataEncoding>(() => new ModHexDataEncoding());
+        public static ModHexDataEncoding ModHex => _modhex.Value;
 
         protected DataEncoding(string alphabet, int @encodingBase)
         {

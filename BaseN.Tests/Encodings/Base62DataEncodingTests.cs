@@ -15,8 +15,7 @@ namespace BaseN.Tests.Encodings
             // See http://www.opitz-online.com/dl/base62_encoding.pdf, Fig. 2, pg. 763
             byte[] bytes = { 0x53, 0xFE, 0x92 };
 
-            var encoder = new Base62DataEncoding();
-            string encoded = encoder.Encode(bytes);
+            string encoded = DataEncoding.Base62.Encode(bytes);
             encoded.Should().Be("U98kC");
         }
 
@@ -25,8 +24,7 @@ namespace BaseN.Tests.Encodings
         {
             byte[] bytes = Encoding.UTF8.GetBytes(SimpleTestCases.SimpleString);
 
-            var encoder = new Base62DataEncoding();
-            string encoded = encoder.Encode(bytes);
+            string encoded = DataEncoding.Base62.Encode(bytes);
             encoded.Should().Be("dGhpcyBpcyBhIHRlc3E");
         }
     }
