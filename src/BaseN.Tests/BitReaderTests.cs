@@ -17,7 +17,7 @@ namespace BaseN.Tests
             var bitio = new BitReader(inStream);
 
             byte value;
-            bitio.ReadChunk(8, out value).Should().Be(-1);
+            bitio.ReadBits(8, out value).Should().Be(0);
             value.Should().Be(0);
         }
 
@@ -30,7 +30,7 @@ namespace BaseN.Tests
             var bitio = new BitReader(inStream);
 
             byte value;
-            bitio.ReadChunk(0, out value).Should().Be(0);
+            bitio.ReadBits(0, out value).Should().Be(0);
             value.Should().Be(0x00);
         }
 
@@ -43,7 +43,7 @@ namespace BaseN.Tests
             var bitio = new BitReader(inStream);
 
             byte value;
-            bitio.ReadChunk(6, out value).Should().Be(6);
+            bitio.ReadBits(6, out value).Should().Be(6);
             value.Should().Be(0x15);
         }
 
@@ -56,7 +56,7 @@ namespace BaseN.Tests
             var bitio = new BitReader(inStream);
 
             byte value;
-            bitio.ReadChunk(8, out value).Should().Be(8);
+            bitio.ReadBits(8, out value).Should().Be(8);
             value.Should().Be(0x55);
         }
 
@@ -72,13 +72,13 @@ namespace BaseN.Tests
             var bitio = new BitReader(inStream);
 
             byte value;
-            bitio.ReadChunk(3, out value).Should().Be(3);
+            bitio.ReadBits(3, out value).Should().Be(3);
             value.Should().Be(0x02);
 
-            bitio.ReadChunk(3, out value).Should().Be(3);
+            bitio.ReadBits(3, out value).Should().Be(3);
             value.Should().Be(0x00);
 
-            bitio.ReadChunk(3, out value).Should().Be(2);
+            bitio.ReadBits(3, out value).Should().Be(2);
             value.Should().Be(0x02);
         }
 
@@ -94,22 +94,22 @@ namespace BaseN.Tests
             var bitio = new BitReader(inStream);
 
             byte value;
-            bitio.ReadChunk(3, out value).Should().Be(3);
+            bitio.ReadBits(3, out value).Should().Be(3);
             value.Should().Be(0x02);
 
-            bitio.ReadChunk(3, out value).Should().Be(3);
+            bitio.ReadBits(3, out value).Should().Be(3);
             value.Should().Be(0x00);
 
-            bitio.ReadChunk(3, out value).Should().Be(3);
+            bitio.ReadBits(3, out value).Should().Be(3);
             value.Should().Be(0x02);
 
-            bitio.ReadChunk(3, out value).Should().Be(3);
+            bitio.ReadBits(3, out value).Should().Be(3);
             value.Should().Be(0x04);
 
-            bitio.ReadChunk(3, out value).Should().Be(3);
+            bitio.ReadBits(3, out value).Should().Be(3);
             value.Should().Be(0x00);
 
-            bitio.ReadChunk(3, out value).Should().Be(1);
+            bitio.ReadBits(3, out value).Should().Be(1);
             value.Should().Be(0x04);
         }
 
@@ -125,13 +125,13 @@ namespace BaseN.Tests
             var bitio = new BitReader(inStream);
 
             byte value;
-            bitio.ReadChunk(8, out value).Should().Be(8);
+            bitio.ReadBits(8, out value).Should().Be(8);
             value.Should().Be(0x41);
 
-            bitio.ReadChunk(8, out value).Should().Be(8);
+            bitio.ReadBits(8, out value).Should().Be(8);
             value.Should().Be(0x41);
 
-            bitio.ReadChunk(8, out value).Should().Be(-1);
+            bitio.ReadBits(8, out value).Should().Be(0);
             value.Should().Be(0x00);
         }
 
@@ -146,7 +146,7 @@ namespace BaseN.Tests
             var bitio = new BitReader(inStream);
 
             byte value;
-            bitio.ReadChunk(4, out value).Should().Be(4);
+            bitio.ReadBits(4, out value).Should().Be(4);
             value.Should().Be(0x04);
             //          ++++
             //  octet = 01000001 01000001 = 0x4141
@@ -157,7 +157,7 @@ namespace BaseN.Tests
             //  octet = 01000001 01000001 = 0x4141
             //           ^ position
 
-            bitio.ReadChunk(4, out value).Should().Be(4);
+            bitio.ReadBits(4, out value).Should().Be(4);
             value.Should().Be(0x08);
             //           ++++
             //  octet = 01000001 01000001 = 0x4141
@@ -175,7 +175,7 @@ namespace BaseN.Tests
             var bitio = new BitReader(inStream);
 
             byte value;
-            bitio.ReadChunk(4, out value).Should().Be(4);
+            bitio.ReadBits(4, out value).Should().Be(4);
             value.Should().Be(0x04);
             //          ++++
             //  octet = 01000001 01000001 = 0x4141
@@ -186,7 +186,7 @@ namespace BaseN.Tests
             //  octet = 01000001 01000001 = 0x4141
             //                 ^ position
 
-            bitio.ReadChunk(4, out value).Should().Be(4);
+            bitio.ReadBits(4, out value).Should().Be(4);
             value.Should().Be(0x0A);
             //                 + +++
             //  octet = 01000001 01000001 = 0x4141
@@ -204,15 +204,15 @@ namespace BaseN.Tests
             var bitio = new BitReader(inStream);
 
             byte value;
-            bitio.ReadChunk(4, out value).Should().Be(4);
+            bitio.ReadBits(4, out value).Should().Be(4);
             //          ++++
             //  octet = 01000001 01000001 = 0x4141
             //              ^ position
-            bitio.ReadChunk(4, out value).Should().Be(4);
+            bitio.ReadBits(4, out value).Should().Be(4);
             //              ++++
             //  octet = 01000001 01000001 = 0x4141
             //                   ^ position
-            bitio.ReadChunk(4, out value).Should().Be(4);
+            bitio.ReadBits(4, out value).Should().Be(4);
             //                   ++++
             //  octet = 01000001 01000001 = 0x4141
             //                       ^ position
@@ -225,7 +225,7 @@ namespace BaseN.Tests
             // NOTE: Not only does the position need to be adjusted, but the bit-reader
             // must also make sure the "current" byte is correct to reflect the current
             // position
-            bitio.ReadChunk(4, out value).Should().Be(4);
+            bitio.ReadBits(4, out value).Should().Be(4);
             value.Should().Be(0x02);
             //               +++ +
             //  octet = 01000001 01000001 = 0x4141
@@ -243,7 +243,7 @@ namespace BaseN.Tests
             var bitio = new BitReader(inStream);
 
             byte value;
-            bitio.ReadChunk(4, out value).Should().Be(4);
+            bitio.ReadBits(4, out value).Should().Be(4);
             //          ++++
             //  octet = 01000001 01000001 = 0x4141
             //              ^ position
@@ -255,7 +255,7 @@ namespace BaseN.Tests
             // NOTE: Not only does the position need to be adjusted, but the bit-reader
             // must also make sure the "current" byte is correct to reflect the current
             // position
-            bitio.ReadChunk(5, out value).Should().Be(5);
+            bitio.ReadBits(5, out value).Should().Be(5);
             value.Should().Be(0x01);
             //                      +++++
             //  octet = 01000001 01000001 = 0x4141
@@ -273,7 +273,7 @@ namespace BaseN.Tests
             var bitio = new BitReader(inStream);
 
             byte value;
-            bitio.ReadChunk(4, out value).Should().Be(4);
+            bitio.ReadBits(4, out value).Should().Be(4);
             //          ++++
             //  octet = 01001001 01001101
             //              ^ position
@@ -285,7 +285,7 @@ namespace BaseN.Tests
             // NOTE: Not only does the position need to be adjusted, but the bit-reader
             // must also make sure the "current" byte is correct to reflect the current
             // position
-            bitio.ReadChunk(3, out value).Should().Be(3);
+            bitio.ReadBits(3, out value).Should().Be(3);
             value.Should().Be(0x02);
             //          +++
             //  octet = 01001001 01001101
@@ -303,7 +303,7 @@ namespace BaseN.Tests
             var bitio = new BitReader(inStream);
 
             byte value;
-            bitio.ReadChunk(4, out value).Should().Be(4);
+            bitio.ReadBits(4, out value).Should().Be(4);
             //          ++++
             //  octet = 01001001 01001101
             //              ^ position
@@ -315,7 +315,7 @@ namespace BaseN.Tests
             // NOTE: Not only does the position need to be adjusted, but the bit-reader
             // must also make sure the "current" byte is correct to reflect the current
             // position
-            bitio.ReadChunk(3, out value).Should().Be(3);
+            bitio.ReadBits(3, out value).Should().Be(3);
             value.Should().Be(0x04);
             //           +++
             //  octet = 01001001 01001101
@@ -333,7 +333,7 @@ namespace BaseN.Tests
             var bitio = new BitReader(inStream);
 
             byte value;
-            bitio.ReadChunk(4, out value).Should().Be(4);
+            bitio.ReadBits(4, out value).Should().Be(4);
             //          ++++
             //  octet = 01001001 01001101
             //              ^ position
@@ -345,7 +345,7 @@ namespace BaseN.Tests
             // NOTE: Not only does the position need to be adjusted, but the bit-reader
             // must also make sure the "current" byte is correct to reflect the current
             // position
-            bitio.ReadChunk(3, out value).Should().Be(3);
+            bitio.ReadBits(3, out value).Should().Be(3);
             value.Should().Be(0x06);
             //                       +++
             //  octet = 01001001 01001101
@@ -363,7 +363,7 @@ namespace BaseN.Tests
             var bitio = new BitReader(inStream);
 
             byte value;
-            bitio.ReadChunk(4, out value).Should().Be(4);
+            bitio.ReadBits(4, out value).Should().Be(4);
             //          ++++
             //  octet = 01001001 01001101
             //              ^ position
@@ -375,7 +375,7 @@ namespace BaseN.Tests
             // NOTE: Not only does the position need to be adjusted, but the bit-reader
             // must also make sure the "current" byte is correct to reflect the current
             // position
-            bitio.ReadChunk(3, out value).Should().Be(3);
+            bitio.ReadBits(3, out value).Should().Be(3);
             value.Should().Be(0x06);
             //                       +++
             //  octet = 01001001 01001101
@@ -393,7 +393,7 @@ namespace BaseN.Tests
             var bitio = new BitReader(inStream);
 
             byte value;
-            bitio.ReadChunk(4, out value).Should().Be(4);
+            bitio.ReadBits(4, out value).Should().Be(4);
             //          ++++
             //  octet = 01001001 01001101
             //              ^ position
@@ -405,7 +405,7 @@ namespace BaseN.Tests
             // NOTE: Not only does the position need to be adjusted, but the bit-reader
             // must also make sure the "current" byte is correct to reflect the current
             // position
-            bitio.ReadChunk(3, out value).Should().Be(3);
+            bitio.ReadBits(3, out value).Should().Be(3);
             value.Should().Be(0x04);
             //              +++
             //  octet = 01001001 01001101
@@ -423,7 +423,7 @@ namespace BaseN.Tests
             var bitio = new BitReader(inStream);
 
             byte value;
-            bitio.ReadChunk(4, out value).Should().Be(4);
+            bitio.ReadBits(4, out value).Should().Be(4);
             //          ++++
             //  octet = 01001001 01001101
             //              ^ position
@@ -435,7 +435,7 @@ namespace BaseN.Tests
             // NOTE: Not only does the position need to be adjusted, but the bit-reader
             // must also make sure the "current" byte is correct to reflect the current
             // position
-            bitio.ReadChunk(3, out value).Should().Be(1);
+            bitio.ReadBits(3, out value).Should().Be(1);
             value.Should().Be(0x04);
             //                          +++
             //  octet = 01001001 01001101

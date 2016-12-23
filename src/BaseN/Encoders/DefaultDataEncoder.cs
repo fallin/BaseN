@@ -27,7 +27,7 @@ namespace BaseN.Encoders
         protected override void FinalizeEncoding(BitReader reader, Stream outputStream)
         {
             byte index;
-            int readBits = reader.ReadChunk(Encoding.BitsPerChar, out index);
+            int readBits = reader.ReadBits(Encoding.BitsPerChar, out index);
             if (readBits > 0)
             {
                 byte c = Encoding.Alphabet[index];

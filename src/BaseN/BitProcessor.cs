@@ -1,71 +1,29 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using EnsureThat;
-using JetBrains.Annotations;
 
 namespace BaseN
 {
-    /// <summary>
-    /// A base class for bit-wise stream readers and writers.
-    /// </summary>
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
-    public abstract class BitIO : IDisposable
+    public abstract class BitProcessor : IDisposable
     {
+        public const int EndOfStream = -1;
         readonly Stream _stream;
         readonly bool _leaveOpen;
         bool _disposed;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BitIO"/> class.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        protected BitIO([NotNull] Stream stream)
-            : this(stream, false)
+        protected BitProcessor(Stream stream) : this(stream, false)
         {
-
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BitIO"/> class.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <param name="leaveOpen">if set to <c>true</c> [leave open].</param>
-        protected BitIO([NotNull] Stream stream, bool leaveOpen)
+        protected BitProcessor(Stream stream, bool leaveOpen)
         {
-            Ensure.That(stream, "stream").IsNotNull();
             _stream = stream;
             _leaveOpen = leaveOpen;
-
-            RelativePosition = 0;
-            CurrentByte = -1;
         }
 
-        /// <summary>
-        /// The end of stream.
-        /// </summary>
-        public const int EndOfStream = -1;
-
-        /// <summary>
-        /// Gets or sets the relative position within the current byte.
-        /// </summary>
-        /// <value>The relative position.</value>
+        public Stream BaseStream => _stream;
         protected int RelativePosition { get; set; }
-
-        /// <summary>
-        /// Gets or sets the current byte from the stream.
-        /// </summary>
-        /// <value>The current byte.</value>
         protected int CurrentByte { get; set; }
-
-        /// <summary>
-        /// Gets the underlying stream.
-        /// </summary>
-        /// <value>The base stream.</value>
-        public Stream BaseStream
-        {
-            get { return _stream; }
-        }
 
         /// <summary>
         /// Gets the absolute position in the stream (in bits).
@@ -77,8 +35,8 @@ namespace BaseN
             {
                 var adjustedPosition = CurrentByte == EndOfStream
                     ? _stream.Position
-                    : Math.Max((long) (int) (_stream.Position - 1), 0);
-                return (adjustedPosition * 8) + RelativePosition;
+                    : Math.Max((long)(int)(_stream.Position - 1), 0);
+                return adjustedPosition * 8 + RelativePosition;
             }
         }
 
@@ -86,10 +44,7 @@ namespace BaseN
         /// Gets the length of the stream (in bits).
         /// </summary>
         /// <value>The length.</value>
-        public long Length
-        {
-            get { return _stream.Length*8; }
-        }
+        public long Length => _stream.Length * 8;
 
         /// <summary>
         /// Sets the position within the stream.
@@ -115,7 +70,7 @@ namespace BaseN
                     absolutePosition = Length + offsetBits - 1;
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("origin");
+                    throw new ArgumentOutOfRangeException(nameof(origin));
             }
 
             long positionBits;
@@ -136,13 +91,29 @@ namespace BaseN
         /// <returns>System.Byte.</returns>
         protected static byte CreateMask(int bits)
         {
-            byte mask = 0;
-            for (int i = 0; i < bits; i++)
+            switch (bits)
             {
-                mask <<= 1;
-                mask |= 1;
+                case 0:
+                    return 0x00;
+                case 1:
+                    return 0x01;
+                case 2:
+                    return 0x03;
+                case 3:
+                    return 0x07;
+                case 4:
+                    return 0x0F;
+                case 5:
+                    return 0x1F;
+                case 6:
+                    return 0x3F;
+                case 7:
+                    return 0x7F;
+                case 8:
+                    return 0xFF;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(bits), bits, "Must be between 0 and 8 (inclusive).");
             }
-            return mask;
         }
 
         /// <summary>
@@ -164,9 +135,9 @@ namespace BaseN
         }
 
         /// <summary>
-        /// Finalizes an instance of the <see cref="BitIO"/> class.
+        /// Finalizes an instance of the <see cref="BitProcessor"/> class.
         /// </summary>
-        ~BitIO()
+        ~BitProcessor()
         {
             Dispose(false);
         }
@@ -183,8 +154,6 @@ namespace BaseN
             {
                 if (disposing)
                 {
-                    // free other managed objects that implement
-                    // IDisposable only
                     if (_leaveOpen)
                     {
                         _stream.Flush();

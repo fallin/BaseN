@@ -1,80 +1,77 @@
 using System;
 using System.IO;
-using EnsureThat;
 using JetBrains.Annotations;
 
 namespace BaseN
 {
-    public class BitReader : BitIO
+    public class BitReader : BitProcessor
     {
-        public BitReader([NotNull] Stream stream)
-            : base(stream)
+        public BitReader([NotNull] Stream stream) : this(stream, false)
         {
         }
 
         public BitReader([NotNull] Stream stream, bool leaveOpen) : base(stream, leaveOpen)
         {
+            RelativePosition = 0;
+            CurrentByte = EndOfStream;
         }
 
         public int ReadCompleteChunk(int countBits, out byte value)
         {
-            int readBits = ReadChunk(countBits, out value);
-            if (readBits == countBits || readBits == EndOfStream) // complete chunk
+            int readBits = ReadBits(countBits, out value);
+            if (readBits == countBits) // complete chunk
             {
                 return readBits;
             }
 
-            Seek(-countBits, SeekOrigin.Current);
+            Seek(-readBits, SeekOrigin.Current);
             value = 0x00;
             return 0;
         }
 
-        public int ReadChunk(int countBits, out byte value)
+        public int ReadBits(int bitCount, out byte value)
         {
-            Ensure.That(countBits, "countBits").IsInRange(0, 8);
+            if (bitCount < 0 || bitCount > 8)
+            {
+                throw new ArgumentOutOfRangeException(nameof(bitCount), bitCount, "Must be between 0 and 8 (inclusive).");
+            }
 
-            // Attempt to read the next byte to prime the _currentByte
+            // Attempt to read the next byte to prime CurrentByte
             if (CurrentByte == EndOfStream)
             {
                 CurrentByte = BaseStream.ReadByte();
             }
 
-            int readBits;
-            int currentBits = 0x00;
-
+            value = 0;
+            int actualBitsRead = 0;
             if (CurrentByte != EndOfStream)
             {
-                RelativePosition += countBits;
-                int shift = 8 - RelativePosition;
-                currentBits |= shift > 0 ? (byte)(CurrentByte >> shift) : (byte)(CurrentByte << Math.Abs(shift));
-                readBits = countBits;
+                int shift = 8 - RelativePosition - bitCount;
+                value = shift > 0 ? (byte)(CurrentByte >> shift) : (byte)(CurrentByte << Math.Abs(shift));
+                value = (byte)(value & CreateMask(bitCount));
+                actualBitsRead += bitCount;
 
-                // Adjust when moving beyond byte boundary
-                if (RelativePosition > 7)
+                if (shift > 0)
                 {
-                    RelativePosition %= 8;
+                    RelativePosition += bitCount;
+                }
+                else // reached or exceeded byte boundary
+                {
+                    RelativePosition = 0;
                     CurrentByte = BaseStream.ReadByte();
-                    if (CurrentByte != EndOfStream)
+
+                    if (shift < 0)
                     {
-                        shift = 8 - RelativePosition;
-                        currentBits |= shift > 0 ? (byte)(CurrentByte >> shift) : (byte)(CurrentByte << Math.Abs(shift));
-                    }
-                    else
-                    {
-                        readBits -= RelativePosition;
+                        actualBitsRead = bitCount + shift;
+
+                        byte remainingValue;
+                        actualBitsRead += ReadBits((byte)Math.Abs(shift), out remainingValue);
+                        value |= remainingValue;
                     }
                 }
-
-                byte mask = CreateMask(countBits);
-                currentBits &= mask;
-            }
-            else
-            {
-                readBits = EndOfStream;
             }
 
-            value = (byte)currentBits;
-            return readBits;
+            return actualBitsRead;
         }
     }
 }
