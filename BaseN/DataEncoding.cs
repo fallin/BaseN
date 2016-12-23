@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using BaseN.Encoders;
 using BaseN.Encodings;
 using EnsureThat;
@@ -37,41 +38,58 @@ namespace BaseN
         static readonly Lazy<ModHexDataEncoding> _modhex = new Lazy<ModHexDataEncoding>(() => new ModHexDataEncoding());
         public static ModHexDataEncoding ModHex => _modhex.Value;
 
-        protected DataEncoding(string alphabet, int @encodingBase)
+        protected DataEncoding(string alphabet, int encodingBase)
         {
-            Alphabet = alphabet.ToCharArray();
+            Alphabet = Encoding.ASCII.GetBytes(alphabet);
 
-            Padding = '=';
+            Padding = (byte) '=';
             BitsPerChar = Log2(encodingBase);
             BitsPerQuantum = Lcm(8, BitsPerChar);
         }
 
-        public char Padding { get; protected set; }
-        public IReadOnlyList<char> Alphabet { get; private set; }
-        public int BitsPerChar { get; private set; }
-        public int BitsPerQuantum { get; private set; }
+        public byte Padding { get; protected set; }
+        public IReadOnlyList<byte> Alphabet { get; private set; }
+        public int BitsPerChar { get; }
+        public int BitsPerQuantum { get; }
 
-        public int CharsPerQuantum
-        {
-            get { return BitsPerQuantum / BitsPerChar; }
-        }
+        public int CharsPerQuantum => BitsPerQuantum / BitsPerChar;
 
         public string Encode(byte[] bytes)
         {
-            using (TextWriter writer = new StringWriter())
+            using (var outputStream = new MemoryStream())
             {
-                using (var encoder = CreateEncoder(writer))
+                using (var encoder = CreateEncoder(outputStream))
                 {
                     encoder.Encode(bytes);
                 }
-                return writer.ToString();
+
+                // The encoded text is always ASCII
+                string encoded = outputStream.ReadAllText();
+                return encoded;
             }
         }
 
-        protected virtual DataEncoder CreateEncoder(TextWriter writer)
+        //public byte[] Decode(string encoded)
+        //{
+        //    using (MemoryStream outputStream = new MemoryStream())
+        //    {
+        //        using (var decoder = CreateDecoder(outputStream))
+        //        {
+        //            decoder.Decode(encoded);
+        //        }
+
+        //        outputStream.Seek(0, SeekOrigin.Begin);
+        //        StreamReader reader = new StreamReader(outputStream);
+        //        string decoded = reader.ReadToEnd();
+
+        //        return decoded;
+        //    }
+        //}
+
+        protected virtual DataEncoder CreateEncoder(Stream outputStream)
         {
-            Ensure.That(writer, "writer").IsNotNull();
-            return new DefaultDataEncoder(this, writer);
+            Ensure.That(outputStream, "outputStream").IsNotNull();
+            return new DefaultDataEncoder(this, outputStream);
         }
 
         static int Gcf(int a, int b)
@@ -87,7 +105,7 @@ namespace BaseN
 
         static int Lcm(int a, int b)
         {
-            return (a / Gcf(a, b)) * b;
+            return a / Gcf(a, b) * b;
         }
 
         static int Log2(int value)

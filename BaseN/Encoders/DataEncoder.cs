@@ -7,26 +7,23 @@ namespace BaseN.Encoders
     public abstract class DataEncoder : IDisposable
     {
         readonly DataEncoding _encoding;
-        readonly TextWriter _writer;
+        readonly Stream _outputStream;
         readonly BitReader _reader;
         bool _disposed;
 
-        protected DataEncoder(DataEncoding encoding, TextWriter writer)
+        protected DataEncoder(DataEncoding encoding, Stream outputStream)
         {
             Ensure.That(encoding, "encoding").IsNotNull();
-            Ensure.That(writer, "writer").IsNotNull();
+            Ensure.That(outputStream, "outputStream").IsNotNull();
 
             _encoding = encoding;
-            _writer = writer;
+            _outputStream = outputStream;
 
             MemoryStream inputStream = new MemoryStream();
             _reader = new BitReader(inputStream);
         }
 
-        protected DataEncoding Encoding
-        {
-            get { return _encoding; }
-        }
+        protected DataEncoding Encoding => _encoding;
 
         public void Encode(byte[] buffer)
         {
@@ -41,12 +38,12 @@ namespace BaseN.Encoders
         public void Encode(ArraySegment<byte> buffer)
         {
             AppendToStream(_reader.BaseStream, buffer);
-            Encode(_reader, _writer);
+            Encode(_reader, _outputStream);
         }
 
         public void Flush()
         {
-            _writer.Flush();
+            _outputStream.Flush();
         }
 
         public void Close()
@@ -54,9 +51,9 @@ namespace BaseN.Encoders
             Dispose(true);
         }
 
-        protected abstract void Encode(BitReader reader, TextWriter writer);
+        protected abstract void Encode(BitReader reader, Stream outputStream);
 
-        protected abstract void FinalizeEncoding(BitReader reader, TextWriter writer);
+        protected abstract void FinalizeEncoding(BitReader reader, Stream outputStream);
 
         void AppendToStream(Stream stream, ArraySegment<byte> buffer)
         {
@@ -85,7 +82,7 @@ namespace BaseN.Encoders
                 if (disposing)
                 {
                     // free managed resources that implement IDisposable
-                    FinalizeEncoding(_reader, _writer);
+                    FinalizeEncoding(_reader, _outputStream);
                 }
 
                 // free native resources if there are any 

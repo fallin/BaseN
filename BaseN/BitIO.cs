@@ -23,7 +23,7 @@ namespace BaseN
         protected BitIO([NotNull] Stream stream)
             : this(stream, false)
         {
-            
+
         }
 
         /// <summary>
@@ -75,8 +75,8 @@ namespace BaseN
         {
             get
             {
-                var adjustedPosition = CurrentByte == EndOfStream 
-                    ? _stream.Position 
+                var adjustedPosition = CurrentByte == EndOfStream
+                    ? _stream.Position
                     : Math.Max((long) (int) (_stream.Position - 1), 0);
                 return (adjustedPosition * 8) + RelativePosition;
             }
@@ -154,7 +154,7 @@ namespace BaseN
         }
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or 
+        /// Performs application-defined tasks associated with freeing, releasing, or
         /// resetting unmanaged resources.
         /// </summary>
         public void Dispose()

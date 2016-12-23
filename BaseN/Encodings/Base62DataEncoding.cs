@@ -31,9 +31,9 @@ namespace BaseN.Encodings
         {
         }
 
-        protected override DataEncoder CreateEncoder(TextWriter writer)
+        protected override DataEncoder CreateEncoder(Stream outputStream)
         {
-            return new Base62DataEncoder(this, writer);
+            return new Base62DataEncoder(this, outputStream);
         }
     }
 }

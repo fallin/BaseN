@@ -15,6 +15,14 @@ namespace BaseN.Tests.Encodings
             encoded.Should().Be("/uTyxNf9Y02KMNLETUQwNA==");
         }
 
+        //[Test]
+        //public void Decode_with_guid()
+        //{
+        //    byte[] decoded = DataEncoding.Base64.Decode("/uTyxNf9Y02KMNLETUQwNA==");
+
+        //    new Guid(decoded).Should().Be(SimpleTestCases.Uuid);
+        //}
+
         [Test]
         public void Encode_with_simple_string()
         {

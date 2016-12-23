@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 
 namespace BaseN.Encoders
 {
@@ -7,30 +8,30 @@ namespace BaseN.Encoders
     {
         int _charsWritten;
 
-        public DefaultDataEncoder(DataEncoding encoding, TextWriter writer)
-            : base(encoding, writer)
+        public DefaultDataEncoder(DataEncoding encoding, Stream outputStream)
+            : base(encoding, outputStream)
         {
         }
 
-        protected override void Encode(BitReader reader, TextWriter writer)
+        protected override void Encode(BitReader reader, Stream outputStream)
         {
             byte index;
             while ((reader.ReadCompleteChunk(Encoding.BitsPerChar, out index)) > 0)
             {
-                char c = Encoding.Alphabet[index];
-                writer.Write(c);
+                byte c = Encoding.Alphabet[index];
+                outputStream.WriteByte(c);
                 _charsWritten++;
             }
         }
 
-        protected override void FinalizeEncoding(BitReader reader, TextWriter writer)
+        protected override void FinalizeEncoding(BitReader reader, Stream outputStream)
         {
             byte index;
             int readBits = reader.ReadChunk(Encoding.BitsPerChar, out index);
             if (readBits > 0)
             {
-                char c = Encoding.Alphabet[index];
-                writer.Write(c);
+                byte c = Encoding.Alphabet[index];
+                outputStream.WriteByte(c);
                 _charsWritten++;
             }
 
@@ -38,7 +39,9 @@ namespace BaseN.Encoders
             if (charsInFinalGroup > 0)
             {
                 int missingCharsInFinalGroup = Encoding.CharsPerQuantum - charsInFinalGroup;
-                writer.Write(new string(Encoding.Padding, missingCharsInFinalGroup));
+
+                byte[] paddingBuffer = Enumerable.Repeat(Encoding.Padding, missingCharsInFinalGroup).ToArray();
+                outputStream.Write(paddingBuffer, 0, missingCharsInFinalGroup);
             }
         }
     }

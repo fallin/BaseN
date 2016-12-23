@@ -6,68 +6,68 @@ namespace BaseN.Tests
     [TestFixture]
     public class Rfc4648TestVectors
     {
-        [TestCase(new byte[] { 0x14, 0xfb, 0x9c, 0x03, 0xd9, 0x7e }, Result = "FPucA9l+")]
-        [TestCase(new byte[] { 0x14, 0xfb, 0x9c, 0x03, 0xd9 }, Result = "FPucA9k=")]
-        [TestCase(new byte[] { 0x14, 0xfb, 0x9c, 0x03 }, Result = "FPucAw==")]
+        [TestCase(new byte[] {0x14, 0xfb, 0x9c, 0x03, 0xd9, 0x7e}, ExpectedResult = "FPucA9l+", TestName = "Input data: 0x14fb9c03d97e")]
+        [TestCase(new byte[] {0x14, 0xfb, 0x9c, 0x03, 0xd9}, ExpectedResult = "FPucA9k=", TestName = "Input data: 0x14fb9c03d9")]
+        [TestCase(new byte[] {0x14, 0xfb, 0x9c, 0x03}, ExpectedResult = "FPucAw==", TestName = "Input data: 0x14fb9c03")]
         public string Base64TestVectors(byte[] input)
         {
-            string encoded = DataEncoding.Base64.Encode(input);
+            var encoded = DataEncoding.Base64.Encode(input);
             return encoded;
         }
 
-        [TestCase("", Result="")]
-        [TestCase("f", Result = "Zg==")]
-        [TestCase("fo", Result = "Zm8=")]
-        [TestCase("foo", Result = "Zm9v")]
-        [TestCase("foob", Result = "Zm9vYg==")]
-        [TestCase("fooba", Result = "Zm9vYmE=")]
-        [TestCase("foobar", Result = "Zm9vYmFy")]
+        [TestCase("", ExpectedResult = "")]
+        [TestCase("f", ExpectedResult = "Zg==")]
+        [TestCase("fo", ExpectedResult = "Zm8=")]
+        [TestCase("foo", ExpectedResult = "Zm9v")]
+        [TestCase("foob", ExpectedResult = "Zm9vYg==")]
+        [TestCase("fooba", ExpectedResult = "Zm9vYmE=")]
+        [TestCase("foobar", ExpectedResult = "Zm9vYmFy")]
         public string Base64TestVectors(string input)
         {
-            byte[] data = Encoding.UTF8.GetBytes(input);
-            string encoded = DataEncoding.Base64.Encode(data);
+            var data = Encoding.UTF8.GetBytes(input);
+            var encoded = DataEncoding.Base64.Encode(data);
             return encoded;
         }
 
-        [TestCase("", Result = "")]
-        [TestCase("f", Result = "MY======")]
-        [TestCase("fo", Result = "MZXQ====")]
-        [TestCase("foo", Result = "MZXW6===")]
-        [TestCase("foob", Result = "MZXW6YQ=")]
-        [TestCase("fooba", Result = "MZXW6YTB")]
-        [TestCase("foobar", Result = "MZXW6YTBOI======")]
+        [TestCase("", ExpectedResult = "")]
+        [TestCase("f", ExpectedResult = "MY======")]
+        [TestCase("fo", ExpectedResult = "MZXQ====")]
+        [TestCase("foo", ExpectedResult = "MZXW6===")]
+        [TestCase("foob", ExpectedResult = "MZXW6YQ=")]
+        [TestCase("fooba", ExpectedResult = "MZXW6YTB")]
+        [TestCase("foobar", ExpectedResult = "MZXW6YTBOI======")]
         public string Base32TestVectors(string input)
         {
-            byte[] data = Encoding.UTF8.GetBytes(input);
-            string encoded = DataEncoding.Base32.Encode(data);
+            var data = Encoding.UTF8.GetBytes(input);
+            var encoded = DataEncoding.Base32.Encode(data);
             return encoded;
         }
 
-        [TestCase("", Result = "")]
-        [TestCase("f", Result = "CO======")]
-        [TestCase("fo", Result = "CPNG====")]
-        [TestCase("foo", Result = "CPNMU===")]
-        [TestCase("foob", Result = "CPNMUOG=")]
-        [TestCase("fooba", Result = "CPNMUOJ1")]
-        [TestCase("foobar", Result = "CPNMUOJ1E8======")]
+        [TestCase("", ExpectedResult = "")]
+        [TestCase("f", ExpectedResult = "CO======")]
+        [TestCase("fo", ExpectedResult = "CPNG====")]
+        [TestCase("foo", ExpectedResult = "CPNMU===")]
+        [TestCase("foob", ExpectedResult = "CPNMUOG=")]
+        [TestCase("fooba", ExpectedResult = "CPNMUOJ1")]
+        [TestCase("foobar", ExpectedResult = "CPNMUOJ1E8======")]
         public string Base32HexTestVectors(string input)
         {
-            byte[] data = Encoding.UTF8.GetBytes(input);
-            string encoded = DataEncoding.Base32Hex.Encode(data);
+            var data = Encoding.UTF8.GetBytes(input);
+            var encoded = DataEncoding.Base32Hex.Encode(data);
             return encoded;
         }
 
-        [TestCase("", Result = "")]
-        [TestCase("f", Result = "66")]
-        [TestCase("fo", Result = "666F")]
-        [TestCase("foo", Result = "666F6F")]
-        [TestCase("foob", Result = "666F6F62")]
-        [TestCase("fooba", Result = "666F6F6261")]
-        [TestCase("foobar", Result = "666F6F626172")]
+        [TestCase("", ExpectedResult = "")]
+        [TestCase("f", ExpectedResult = "66")]
+        [TestCase("fo", ExpectedResult = "666F")]
+        [TestCase("foo", ExpectedResult = "666F6F")]
+        [TestCase("foob", ExpectedResult = "666F6F62")]
+        [TestCase("fooba", ExpectedResult = "666F6F6261")]
+        [TestCase("foobar", ExpectedResult = "666F6F626172")]
         public string Base16TestVectors(string input)
         {
-            byte[] data = Encoding.UTF8.GetBytes(input);
-            string encoded = DataEncoding.Base16.Encode(data);
+            var data = Encoding.UTF8.GetBytes(input);
+            var encoded = DataEncoding.Base16.Encode(data);
             return encoded;
         }
     }

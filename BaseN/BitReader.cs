@@ -41,7 +41,7 @@ namespace BaseN
 
             int readBits;
             int currentBits = 0x00;
-            
+
             if (CurrentByte != EndOfStream)
             {
                 RelativePosition += countBits;
