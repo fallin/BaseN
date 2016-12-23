@@ -5,7 +5,9 @@
         <version>0.1.1</version>
         <title>BaseN</title>
         <authors>Brant Fallin</authors>
-        <licenseUrl>https://github.com/fallin/BaseN/blob/master/LICENSE.txt</licenseUrl>
+        <owners>Brant Fallin, fallin</owners>
+        <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
+        <projectUrl>https://github.com/fallin/BaseN</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>A .NET (C#) implementation of various binary-to-text data encodings.</description>
         <language>en-US</language>
@@ -15,8 +17,7 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="..\BaseN\bin\Debug\BaseN.dll" target="lib\net451\BaseN.dll" />
-        <file src="..\BaseN\bin\Debug\BaseN.pdb" target="lib\net451\BaseN.pdb" />
-        <file src="..\BaseN\bin\Debug\BaseN.XML" target="lib\net451\BaseN.XML" />
+        <file src="src\BaseN\bin\Release\BaseN.dll" target="lib\net452\BaseN.dll" />
+        <!--file src="src\BaseN\bin\Release\BaseN.XML" target="lib\net452\BaseN.XML" /-->
     </files>
 </package>

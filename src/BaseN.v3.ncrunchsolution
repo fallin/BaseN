@@ -1,9 +1,6 @@
 ﻿<SolutionConfiguration>
   <Settings>
     <AllowParallelTestExecution>True</AllowParallelTestExecution>
-    <MetricsExclusionList>
-      <Value>BaseN.Tests\BaseN.Tests.csproj</Value>
-    </MetricsExclusionList>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
 </SolutionConfiguration>
