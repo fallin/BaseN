@@ -9,22 +9,14 @@ namespace BaseN.Tests.Encodings
     public class Base64DataEncodingTests
     {
         [Test]
-        public void Encode_with_guid()
+        public void Encode_guid()
         {
             string encoded = DataEncoding.Base64.Encode(SimpleTestCases.Uuid.ToByteArray());
             encoded.Should().Be("/uTyxNf9Y02KMNLETUQwNA==");
         }
 
-        //[Test]
-        //public void Decode_with_guid()
-        //{
-        //    byte[] decoded = DataEncoding.Base64.Decode("/uTyxNf9Y02KMNLETUQwNA==");
-
-        //    new Guid(decoded).Should().Be(SimpleTestCases.Uuid);
-        //}
-
         [Test]
-        public void Encode_with_simple_string()
+        public void Encode_simple_string()
         {
             byte[] ascii = Encoding.ASCII.GetBytes(SimpleTestCases.SimpleString);
             string encoded = DataEncoding.Base64.Encode(ascii);
@@ -32,7 +24,7 @@ namespace BaseN.Tests.Encodings
         }
 
         [Test]
-        public void Encode_with_quantum()
+        public void Encode_quantum()
         {
             byte[] ascii = Encoding.ASCII.GetBytes("ABC");
             string encoded = DataEncoding.Base64.Encode(ascii);
@@ -40,7 +32,7 @@ namespace BaseN.Tests.Encodings
         }
 
         [Test]
-        public void Encode_with_quantum_minus1()
+        public void Encode_quantum_minus1()
         {
             byte[] ascii = Encoding.ASCII.GetBytes("AB");
             string encoded = DataEncoding.Base64.Encode(ascii);
@@ -48,7 +40,7 @@ namespace BaseN.Tests.Encodings
         }
 
         [Test]
-        public void Encode_with_quantum_minus2()
+        public void Encode_quantum_minus2()
         {
             byte[] ascii = Encoding.ASCII.GetBytes("A");
             string encoded = DataEncoding.Base64.Encode(ascii);
@@ -56,7 +48,7 @@ namespace BaseN.Tests.Encodings
         }
 
         [Test]
-        public void Encode_with_empty_string()
+        public void Encode_empty_string()
         {
             byte[] ascii = Encoding.ASCII.GetBytes("");
             string encoded = DataEncoding.Base64.Encode(ascii);
@@ -64,7 +56,7 @@ namespace BaseN.Tests.Encodings
         }
 
         [Test]
-        public void Encode_with_null_string()
+        public void Encode_should_throw_when_null_string()
         {
             Action action = () => DataEncoding.Base64.Encode(null);
             action.ShouldThrow<ArgumentNullException>();

@@ -11,7 +11,7 @@ namespace BaseN.Tests.Encoders
     public class DefaultDataEncoderTests
     {
         [Test]
-        public void Encode_with_quantum_single_write()
+        public void Encode_quantum_single_write()
         {
             var output = new MemoryStream();
             using (var encoder = new DefaultDataEncoder(DataEncoding.Base64, output))
@@ -24,7 +24,7 @@ namespace BaseN.Tests.Encoders
         }
 
         [Test]
-        public void Encode_with_quantum_across_multiple_writes()
+        public void Encode_quantum_across_multiple_writes()
         {
             var output = new MemoryStream();
             using (var encoder = new DefaultDataEncoder(DataEncoding.Base64, output))
@@ -40,7 +40,7 @@ namespace BaseN.Tests.Encoders
         }
 
         [Test]
-        public void Encode_with_quantum_minus1_single_write()
+        public void Encode_quantum_minus1_single_write()
         {
             var output = new MemoryStream();
             using (var encoder = new DefaultDataEncoder(DataEncoding.Base64, output))
@@ -53,7 +53,7 @@ namespace BaseN.Tests.Encoders
         }
 
         [Test]
-        public void Encode_with_quantum_minus2_across_multiple_writes()
+        public void Encode_quantum_minus2_across_multiple_writes()
         {
             var output = new MemoryStream();
             using (var encoder = new DefaultDataEncoder(DataEncoding.Base64, output))
@@ -69,7 +69,7 @@ namespace BaseN.Tests.Encoders
         }
 
         [Test]
-        public void Flush_should_handle_when_called_before_dispose()
+        public void Flush_should_write_to_stream_when_called_before_dispose()
         {
             var output = new MemoryStream();
             using (var encoder = new DefaultDataEncoder(DataEncoding.Base64, output))

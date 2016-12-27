@@ -20,7 +20,7 @@ namespace BaseN.Tests.Encodings
         }
 
         [Test]
-        public void Encode_with_simple_string()
+        public void Encode_simple_string()
         {
             byte[] bytes = Encoding.UTF8.GetBytes(SimpleTestCases.SimpleString);
 

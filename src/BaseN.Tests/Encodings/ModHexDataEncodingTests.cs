@@ -9,7 +9,7 @@ namespace BaseN.Tests.Encodings
     public class ModHexDataEncodingTests
     {
         [Test]
-        public void Encode_with_simple_string()
+        public void Encode_simple_string()
         {
             byte[] ascii = Encoding.ASCII.GetBytes(SimpleTestCases.SimpleString);
             string encoded = DataEncoding.ModHex.Encode(ascii);

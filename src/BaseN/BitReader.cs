@@ -6,6 +6,10 @@ namespace BaseN
 {
     public class BitReader : BitProcessor
     {
+        public BitReader(byte[] bytes) : this(new MemoryStream(bytes))
+        {
+        }
+
         public BitReader([NotNull] Stream stream) : this(stream, false)
         {
         }
