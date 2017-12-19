@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace BaseN.Tests.Encodings
 {
     [TestFixture]
-    public class Base64DataEncodingTests
+    public class Base64Tests
     {
         [Test]
         public void Encode_guid()
@@ -21,6 +21,14 @@ namespace BaseN.Tests.Encodings
             byte[] ascii = Encoding.ASCII.GetBytes(SimpleTestCases.SimpleString);
             string encoded = DataEncoding.Base64.Encode(ascii);
             encoded.Should().Be("dGhpcyBpcyBhIHRlc3Q=");
+        }
+
+        [Test]
+        public void VerifyEncodingParameters()
+        {
+            DataEncoding.Base64.BitsPerQuantum.Should().Be(24);
+            DataEncoding.Base64.EncodedCharsPerQuantum.Should().Be(4);
+            DataEncoding.Base64.BitsPerEncodedChar.Should().Be(6);
         }
 
         [Test]

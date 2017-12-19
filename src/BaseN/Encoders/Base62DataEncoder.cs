@@ -14,7 +14,7 @@ namespace BaseN.Encoders
         protected override void Encode(BitReader reader, Stream outputStream)
         {
             byte index;
-            while ((reader.ReadCompleteChunk(Encoding.BitsPerChar, out index)) > 0)
+            while ((reader.ReadCompleteChunk(Encoding.BitsPerEncodedChar, out index)) > 0)
             {
                 if (index < 60)
                 {
@@ -36,12 +36,12 @@ namespace BaseN.Encoders
         protected override void FinalizeEncoding(BitReader reader, Stream outputStream)
         {
             byte index;
-            int readBits = reader.ReadBits(Encoding.BitsPerChar, out index);
+            int readBits = reader.ReadBits(Encoding.BitsPerEncodedChar, out index);
             if (readBits > 0)
             {
-                if (readBits < Encoding.BitsPerChar)
+                if (readBits < Encoding.BitsPerEncodedChar)
                 {
-                    index >>= Encoding.BitsPerChar - readBits;
+                    index >>= Encoding.BitsPerEncodedChar - readBits;
                 }
                 outputStream.WriteByte(Encoding.Alphabet[index]);
             }

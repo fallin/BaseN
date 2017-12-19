@@ -28,13 +28,15 @@ namespace BaseN.Tests
             using (var reader = new BitReader(bytes))
             {
                 byte b1;
-                int bitsRead1 = reader.ReadBits(5, out b1); // 01010101 --------
+                int bitsRead1 = reader.ReadBits(5, out b1);
+                // 01010101 --------
                 // ^^^^^    ~~> 00001010 = 0x0A
                 b1.Should().Be(0x0A);
                 bitsRead1.Should().Be(5);
 
                 byte b2;
-                int bitsRead2 = reader.ReadBits(5, out b2); // 01010101 --------
+                int bitsRead2 = reader.ReadBits(5, out b2);
+                // 01010101 --------
                 //      ^^^ ^^
                 // Possible alternatives:
                 // 1. 00000101 = 0x05 (right-aligned)
@@ -54,21 +56,21 @@ namespace BaseN.Tests
             using (var reader = new BitReader(bytes))
             {
                 byte b1;
-                int bitsRead1 = reader.ReadBits(5, out b1); 
+                int bitsRead1 = reader.ReadBits(5, out b1);
                 // 01010101 --------
                 // ^^^^^    ~~> 00001010 = 0x0A
                 b1.Should().Be(0x0A);
                 bitsRead1.Should().Be(5);
 
                 byte b2;
-                int bitsRead2 = reader.ReadBits(5, out b2); 
+                int bitsRead2 = reader.ReadBits(5, out b2);
                 // 01010101 -------- (reach end of stream)
                 //      ^^^ ^^ ~~> 00010100 = 0x14
                 b2.Should().Be(0x14);
                 bitsRead2.Should().Be(3);
 
                 byte b3;
-                int bitsRead3 = reader.ReadBits(5, out b3); 
+                int bitsRead3 = reader.ReadBits(5, out b3);
                 // 01010101 -------- (beyond end of stream)
                 //            ^^^^^^ ~~> 0x00
                 b3.Should().Be(0x00);
@@ -217,13 +219,13 @@ namespace BaseN.Tests
             using (var reader = new BitReader(bytes))
             {
                 byte b1;
-                reader.ReadBits(5, out b1); 
+                reader.ReadBits(5, out b1);
                 // 01010101 10101010
                 // ^^^^^             ~~> 00001010 = 0x0A
                 b1.Should().Be(0x0A);
 
                 byte b2;
-                reader.ReadBits(5, out b2); 
+                reader.ReadBits(5, out b2);
                 // 01010101 10101010
                 //      ^^^ ^^       ~~> 00010110 = 0x16
                 b2.Should().Be(0x16);
@@ -237,13 +239,13 @@ namespace BaseN.Tests
             using (var reader = new BitReader(bytes))
             {
                 byte b1;
-                reader.ReadBits(8, out b1); 
+                reader.ReadBits(8, out b1);
                 // 01010101 10101010
                 // ^^^^^^^^          ~~> 01010101 = 0x55
                 b1.Should().Be(0x55);
 
                 byte b2;
-                reader.ReadBits(8, out b2); 
+                reader.ReadBits(8, out b2);
                 // 01010101 10101010
                 //          ^^^^^^^^ ~~> 10101010 = 0xAA
                 b2.Should().Be(0xAA);
@@ -257,19 +259,19 @@ namespace BaseN.Tests
             using (var reader = new BitReader(bytes))
             {
                 byte b1;
-                reader.ReadBits(5, out b1); 
+                reader.ReadBits(5, out b1);
                 // 01010101 10101010
                 // ^^^^^             ~~> 00001010 = 0x0A
                 b1.Should().Be(0x0A);
 
                 byte b2;
-                reader.ReadBits(4, out b2); 
+                reader.ReadBits(4, out b2);
                 // 01010101 10101010
                 //      ^^^ ^        ~~> 00001011 = 0x0B
                 b2.Should().Be(0x0B);
 
                 byte b3;
-                reader.ReadBits(2, out b3); 
+                reader.ReadBits(2, out b3);
                 // 01010101 10101010
                 //           ^^      ~~> 00000001 = 0x01
                 b3.Should().Be(0x01);

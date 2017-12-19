@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace BaseN.Tests.Encodings
 {
     [TestFixture]
-    public class Base62DataEncodingTests
+    public class Base62Tests
     {
         [Test]
         public void Encode_whitepaper_use_case()
@@ -26,6 +26,14 @@ namespace BaseN.Tests.Encodings
 
             string encoded = DataEncoding.Base62.Encode(bytes);
             encoded.Should().Be("dGhpcyBpcyBhIHRlc3E");
+        }
+
+        [Test]
+        public void VerifyEncodingParameters()
+        {
+            DataEncoding.Base62.BitsPerQuantum.Should().Be(24);
+            DataEncoding.Base62.EncodedCharsPerQuantum.Should().Be(4);
+            DataEncoding.Base62.BitsPerEncodedChar.Should().Be(6);
         }
     }
 }

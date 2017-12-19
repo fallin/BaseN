@@ -1,12 +1,13 @@
 using System;
 using System.Text;
+using BaseN.Encodings;
 using FluentAssertions;
 using NUnit.Framework;
 
 namespace BaseN.Tests.Encodings
 {
     [TestFixture]
-    public class Base32DataEncodingTests
+    public class Base32Tests
     {
         [Test]
         public void Encode_guid()
@@ -24,7 +25,15 @@ namespace BaseN.Tests.Encodings
         }
 
         [Test]
-        public void Encode_1byte() // quantum - 4 bytes
+        public void VerifyEncodingParameters()
+        {
+            DataEncoding.Base32.BitsPerQuantum.Should().Be(40);
+            DataEncoding.Base32.EncodedCharsPerQuantum.Should().Be(8);
+            DataEncoding.Base32.BitsPerEncodedChar.Should().Be(5);
+        }
+
+        [Test]
+        public void Encode_quantum_minus4bytes()
         {
             byte[] bytes = { 0x11 };
             string encoded = DataEncoding.Base32.Encode(bytes);
@@ -32,7 +41,7 @@ namespace BaseN.Tests.Encodings
         }
 
         [Test]
-        public void Encode_2bytes() // quantum - 3 bytes
+        public void Encode_quantum_minus3bytes()
         {
             byte[] bytes = { 0x11, 0x11 };
             string encoded = DataEncoding.Base32.Encode(bytes);
@@ -40,7 +49,7 @@ namespace BaseN.Tests.Encodings
         }
 
         [Test]
-        public void Encode_3bytes() // quantum - 2 bytes
+        public void Encode_quantum_minus2bytes()
         {
             byte[] bytes = { 0x11, 0x11, 0x11 };
             string encoded = DataEncoding.Base32.Encode(bytes);
@@ -48,7 +57,7 @@ namespace BaseN.Tests.Encodings
         }
 
         [Test]
-        public void Encode_4bytes() // quantum - 1 byte
+        public void Encode_quantum_minus1byte()
         {
             byte[] bytes = { 0x11, 0x11, 0x11, 0x11 };
             string encoded = DataEncoding.Base32.Encode(bytes);
@@ -64,7 +73,7 @@ namespace BaseN.Tests.Encodings
         }
 
         [Test]
-        public void Encode_quantum_plus1()
+        public void Encode_quantum_plus1byte()
         {
             byte[] bytes = { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
             string encoded = DataEncoding.Base32.Encode(bytes);
@@ -72,7 +81,7 @@ namespace BaseN.Tests.Encodings
         }
 
         [Test]
-        public void Encode_quantum_plus2()
+        public void Encode_quantum_plus2bytes()
         {
             byte[] bytes = { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
             string encoded = DataEncoding.Base32.Encode(bytes);
@@ -80,7 +89,7 @@ namespace BaseN.Tests.Encodings
         }
 
         [Test]
-        public void Encode_quantum_plus3()
+        public void Encode_quantum_plus3bytes()
         {
             byte[] bytes = { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
             string encoded = DataEncoding.Base32.Encode(bytes);
@@ -88,7 +97,7 @@ namespace BaseN.Tests.Encodings
         }
 
         [Test]
-        public void Encode_quantum_plus4()
+        public void Encode_quantum_plus4bytes()
         {
             byte[] bytes = { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
             string encoded = DataEncoding.Base32.Encode(bytes);
